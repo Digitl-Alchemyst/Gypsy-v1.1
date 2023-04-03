@@ -3,6 +3,11 @@ import './normalize.css';
 import './App.css';
 
 function App() {
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    console.log('submit');
+  }
   return (
     <div className="App">
       <aside className="sidemenu">
