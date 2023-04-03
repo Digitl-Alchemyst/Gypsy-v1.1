@@ -34,7 +34,11 @@ function App() {
           </div>
         </div>
         <div className="chat-input-holder">
-          <textarea className="chat-input-textarea" placeholder="To start a conversation with Gypsy, type a message here..."></textarea>
+          <form onSubmit={handleSubmit}>
+          <input 
+          rows="1"
+          className="chat-input-textarea" placeholder="To start a conversation with Gypsy, type a message here..."></input>
+          </form>
         </div>
 
       </section>
