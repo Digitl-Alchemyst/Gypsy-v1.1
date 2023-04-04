@@ -1,39 +1,79 @@
 //import logo from './logo.svg';
 import './normalize.css';
 import './App.css';
-import { useState, } from 'react';
+import { useState, useEffect, } from 'react';
+
 
 function App() {
 
-  const [input, setInput] = useState('');
+  useEffect(() => {
+    getEngines();
+  }, []);
+
+
+  const [input, setInput] = useState("");
+  const [models, setModels] = useState([]);
   const [chatLog, setChatLog] = useState([
-    { user: "gpt",
-      message: "Hello, I'm Gypsy. I'm a chatbot that can talk to you about anything. What would you like to talk about?"
-    },{ 
-      user: "me",
-       message: "Gypsy, can you help me today?"
-    }
+    // { user: "gpt",
+    //   message: "Hello, I'm Gypsy. I'm a chatbot that can talk to you about anything. What would you like to talk about?"
+    // },{ 
+    //   user: "me",
+    //   message: "Gypsy, can you help me today?"
+    // }
   ]);
- 
+
+// clear chat log
+  function clearChat() {
+  setChatLog([]);
+  }
+
+  function getEngines() {
+    fetch("http://localhost:3080/models")
+    .then(res => res.json())
+    .then(data => {
+      console.log(data.models.data)
+      setModels(data.models.data)
+    })
+  }
+
   async function handleSubmit(e){
     e.preventDefault();
-    // eslint-disable-next-line
-    setChatLog([...chatLog, { user: "me", message: '${input}'}])
+    let chatLogNew = [...chatLog, { user: "me", message: `${input}`} ]
     setInput("");
+    setChatLog(chatLogNew)
+
+    const messages = chatLogNew.map((message) => message.message).join("\n") 
+    const response = await fetch("http://localhost:3080/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: messages
+         })
+    });
+    const data = await response.json();
   }
  
   return (
     <div className="App">
       <aside className="sidemenu">
-        <div className="side-menu-button">
+        <div className="side-menu-button" onClick={clearChat}>
           <span>+</span>
           New Chat
+        </div>
+        <div className="models">
+          <select>
+            {models.map((model, index) => (
+              <option key={model.id} value={model.id}>{model.id}</option>
+            ))}
+          </select>
         </div>
       </aside>
       <section className="chatbox">
         <div className="chat-log">
           {chatLog.map((message, index) => (
-            <ChatMessage key={index} message={message} />
+            <ChatMessage key={index} message ={message} />
           ))}
         </div>
         <div className="chat-input-holder">
@@ -70,8 +110,8 @@ const ChatMessage = ({ message }) => {
               <div className="message">
                 {message.message}
               </div>
-            </div>
-          </div>
+        </div>
+      </div>
   )
 }
 
