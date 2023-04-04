@@ -25,7 +25,9 @@ function App() {
       </aside>
       <section className="chatbox">
         <div className="chat-log">
-          <ChatMessage message={message} />
+          {chatLog.map((message, index) => (
+            <ChatMessage key={index} message={message} />
+          ))}
           <div className="chat-message chatgpt">
             <div className="chat-message-center">
               <div className="avatar chatgpt">
