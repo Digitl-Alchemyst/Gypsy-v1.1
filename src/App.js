@@ -7,12 +7,11 @@ function App() {
 
   const [input, setInput] = useState('');
   const [chatLog, setChatLog] = useState([
-    {
-      user: "gpt",
+    { user: "gpt",
       message: "Hello, I'm Gypsy. I'm a chatbot that can talk to you about anything. What would you like to talk about?"
-    },{
+    },{ 
       user: "me",
-      message: "Gypsy, can you help me today?"
+       message: "Gypsy, can you help me today?"
     }
   ]);
  
