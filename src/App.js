@@ -6,13 +6,21 @@ import { useState, } from 'react';
 function App() {
 
   const [input, setInput] = useState('');
-  const [chatLog, setChatLog] = useState([]);
-
+  const [chatLog, setChatLog] = useState([
+    {
+      user: "gpt",
+      message: "Hello, I'm Gypsy. I'm a chatbot that can talk to you about anything. What would you like to talk about?"
+    },{
+      user: "me",
+      message: "Gypsy, can you help me today?"
+    }
+  ]);
+ 
   async function handleSubmit(e){
     e.preventDefault();
+    // eslint-disable-next-line
     setChatLog([...chatLog, { user: "me", message: '${input}'}])
     setInput("");
-    
   }
  
   return (
@@ -28,17 +36,7 @@ function App() {
           {chatLog.map((message, index) => (
             <ChatMessage key={index} message={message} />
           ))}
-          <div className="chat-message chatgpt">
-            <div className="chat-message-center">
-              <div className="avatar chatgpt">
-              
-                  </div>
-                    <div className="message">
-                      hello i am gypsy
-                    </div>
-              </div>
-            </div>
-          </div>
+        </div>
         <div className="chat-input-holder">
           <form onSubmit={handleSubmit}>
           <input 
@@ -48,19 +46,17 @@ function App() {
           className="chat-input-textarea" placeholder="To start a conversation with Gypsy, type a message here..."></input>
           </form>
         </div>
-
       </section>
-
     </div>
   );
 }
 
 const ChatMessage = ({ message }) => {
   return (
-    <div className={`chat-message ${message.user == "gpt" && "chatgpt"}`}>
+    <div className={`chat-message ${message.user === "gpt" && "chatgpt"}`}>
       <div className="chat-message-center">
-        <div className={`avatar ${message.user == "gpt" && "chatgpt"}`}>
-          {message.user == "gpt" && <svg
+        <div className={`avatar ${message.user === "gpt" && "chatgpt"}`}>
+          {message.user === "gpt" && <svg
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
                 strokeWidth={1 / 5}
@@ -71,8 +67,7 @@ const ChatMessage = ({ message }) => {
                 fill="currentColor"
                 />
                 </svg>}
-        </div>
-        
+        </div>        
               <div className="message">
                 {message.message}
               </div>
