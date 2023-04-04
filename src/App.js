@@ -13,6 +13,7 @@ function App() {
 
   const [input, setInput] = useState("");
   const [models, setModels] = useState([]);
+  const [currentModel, setCurrentModel] = useState("ada");
   const [chatLog, setChatLog] = useState([
     // { user: "gpt",
     //   message: "Hello, I'm Gypsy. I'm a chatbot that can talk to you about anything. What would you like to talk about?"
@@ -49,7 +50,8 @@ function App() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        message: messages
+        message: messages,
+        currentModel,
          })
     });
     const data = await response.json();
@@ -63,7 +65,9 @@ function App() {
           New Chat
         </div>
         <div className="models">
-          <select>
+          <select onChange={(e) => {
+            setCurrentModel(e.target.value)
+          }}>
             {models.map((model, index) => (
               <option key={model.id} value={model.id}>{model.id}</option>
             ))}
