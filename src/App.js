@@ -7,7 +7,7 @@ import { useState, useEffect, } from 'react';
 function App() {
 
   useEffect(() => {
-    getEngines();
+    getModels();
   }, []);
 
 
@@ -28,7 +28,7 @@ function App() {
   setChatLog([]);
   }
 
-  function getEngines() {
+  function getModels() {
     fetch("http://localhost:3080/models")
     .then(res => res.json())
     .then(data => {
