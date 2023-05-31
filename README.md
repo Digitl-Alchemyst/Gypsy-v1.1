@@ -1,6 +1,6 @@
 <h1>
 <ul><b>
-**Project-Dahsy**
+**GPT-client**
 </b></ul>
 </h1>
 
