@@ -4,11 +4,13 @@
 </b></ul>
 </h1>
 
-###
-
-            => About
-            This is my first JavaScript project. Originally made with CRA & JavaScript, Converted to Vite + React + TS just before my 1 year mark. ChatGPT clone using OPEN AI API to recreate the Chat GPT site experience with enhanced features. 
-                => Project is abandoned for a new version using Next.JS
+<h2>
+About
+</h2>
+<p>
+This is my first JavaScript project. Originally made with CRA & JavaScript, Converted to Vite + React + TS just before my 1 year mark. ChatGPT clone using OPEN AI API to recreate the Chat GPT site experience with enhanced features. 
+Project is abandoned for a new version using Next.JS
+</p>
 <h2>
 <ul><b>Development Enviroment</b></ul>
 </h2>
