@@ -7,32 +7,33 @@ interface ChatMessage {
   message: string;
 }
 
-// interface Model {
-//   id: string;
-// }
+interface Model {
+  id: string;
+}
 
 function App() {
 
   const [input, setInput] = useState('');
-  // const [models, setModels] = useState<Model[]>([]);
-  // const [currentModel, setCurrentModel] = useState('ada');
+  const [models, setModels] = useState<Model[]>([]);
+  const [currentModel, setCurrentModel] = useState('ada');
   const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
   const [apiKey, setApiKey] = useState('');
 
-  // useEffect(() => {
-  //   getModels();
-  // }, []);
+  useEffect(() => {
+    getModels();
+  }, []);
 
   // clear chat log
   function clearChat() {
     setChatLog([]);
   }
 
-  // async function getModels() {
-  //   const response = await fetch('http://localhost:3080/models');
-  //   const data = await response.json();
-  //   setModels(data.models.data);
-  // }
+  async function getModels() {
+    const response = await fetch('http://localhost:3080/models');
+    const data = await response.json();
+    getModels();
+  }
+
 
 
   // Submit Prompt to OpenAI 
@@ -44,7 +45,7 @@ function App() {
     setInput('');
     setChatLog(chatLogNew);
 
-    const messages = chatLogNew.map((m) => m.message).join('\n');
+    const messages = chatLogNew.map((m) => m.message).join('\n ');
 
     const response = await fetch('http://localhost:3000/', {
       method: 'POST',
@@ -53,12 +54,12 @@ function App() {
       },
       body: JSON.stringify({
         message: messages,
-        // currentModel,
+        currentModel,
       }),
     });
 
     const data = await response.json();
-    // console.log("🚀 ~ data:", data)
+    console.log("🚀 ~ data:", data)
   }
 
   // Set API Key for OpenAI in the server
@@ -84,7 +85,7 @@ console.log('Sending API Key:', apiKey);
       {/* Side Menu  */}
       <aside className="sidemenu">
         <div>
-          {/* Model Selection 
+          {/* Model Selection  */}
           <div className="models">
             <p>Select a Model</p>
             <select
@@ -97,7 +98,7 @@ console.log('Sending API Key:', apiKey);
                 </option>
               ))}
             </select>
-          </div> */}
+          </div>
 
           {/* New Chat Button  */}
           <div className="side-menu-button" onClick={clearChat}>

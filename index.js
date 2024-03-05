@@ -18,6 +18,9 @@ app.use(cors());
 // Variable to store the API key
 let apiKey = '';
 
+// Define openai at a higher scope level
+let openai;
+
 // Route to update the API key
 app.post('/apikey', (req, res) => {
   const { key } = req.body;
@@ -34,7 +37,7 @@ function initializeOpenAI() {
     return;
   }
 
-  const openai = new OpenAI({
+  openai = new OpenAI({
     organization: 'org-KQGtXSQgRwgt8k3iUKzHg5uA',
     apiKey: `Bearer ${apiKey}`,
   });
@@ -60,26 +63,28 @@ app.listen(port, () => {
   console.log(`Gypsy is listening at http://localhost:${port}`);
 });
 
-
-// const models = await openai.models.list();
-
 // Route to Send Prompt to OpenAI
 app.post('/', async (req, res) => {
+    // Log the received message from the front end
+    console.log('Received message from front end:', req.body);
+
+    if (!openai) {
+        res.status(400).send('OpenAI instance not initialized yet.');
+        return;
+    }
+
     const completion = await openai.chat.completions.create({
-    messages: [{ role: 'system', content: 'Does this test pass?' }],
-    model: 'gpt-3.5-turbo',
-    temperature: 0.7,
-    maxTokens: 100,
-    topP: 1,
-    frequencyPenalty: 0,
-    presencePenalty: 0,
-  });
-  console.log(completion.choices[0]);
-  res.json({
-    data: completion.choices
-  })
+        messages: [{ role: 'system', content: 'Does this test pass?' }],
+        model: 'gpt-3.5-turbo',
+        temperature: 0.7,
+        maxTokens: 100,
+        topP: 1,
+        frequencyPenalty: 0,
+        presencePenalty: 0,
+    });
+    console.log(completion.choices[0]);
+    res.json({
+        data: completion.choices
+    });
 });
 
-
-
-// const models = await openai.models.list();
