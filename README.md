@@ -21,6 +21,7 @@ Project is abandoned for a new version using Next.JS
         => React.js<br>
         => Typescript<br>
     Plugins<br>
+        => OpenAI<br>
         => Express<br>
         => Cors<br>
         => Body-Parser<br>
