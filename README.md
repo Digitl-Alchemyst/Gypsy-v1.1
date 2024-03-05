@@ -21,10 +21,10 @@ Project is abandoned for a new version using Next.JS
         => React.js<br>
         => Typescript<br>
     Plugins<br>
-        => <br>
-        => <br>
-        => <br>
-        => <br>
+        => Express<br>
+        => Cors<br>
+        => Body-Parser<br>
+        => Morgan<br>
 </h4>
 
 <h3>
