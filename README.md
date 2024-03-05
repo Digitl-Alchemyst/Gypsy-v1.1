@@ -48,8 +48,8 @@ Project is abandoned for a new version using Next.JS
 
 ## OpenAI API Key
 
-    You will need an API key from OpenAI to use the GypsyGPT chat bot. You can enter your API Key in the menu in the appilication. This key is stored in State and is overwritten when a new key is entered. It is not recommened to host this application publically and then enter your API key. This will allow anyone who accesses the app use of your API key that is stored in state. If you want to host this on the public internet it is recommened that enter dummy text after use to clear the API key from state or to shut down the application. Or to modify the code to read the API in a way that is secure for the public web, such as using a.env file.
+You will need an API key from OpenAI to use the GypsyGPT chat bot. You can enter your API Key in the menu in the appilication. This key is stored in State and is overwritten when a new key is entered. It is not recommened to host this application publically and then enter your API key. This will allow anyone who accesses the app use of your API key that is stored in state. If you want to host this on the public internet it is recommened that enter dummy text after use to clear the API key from state or to shut down the application. Or to modify the code to read the API in a way that is secure for the public web, such as using a.env file.
 
 ## Chat Message History
 
-    The chat history is stored in a local state storage variable. If you want to clear the history you can do so by clicking the new chat button in the menu. This will both start a new chat and erase the history of the previous chat. Chat messages are not stored in any other way, thus there is no message history aside from the records of your API request with OpenAI
+The chat history is stored in a local state storage variable. If you want to clear the history you can do so by clicking the new chat button in the menu. This will both start a new chat and erase the history of the previous chat. Chat messages are not stored in any other way, thus there is no message history aside from the records of your API request with OpenAI
