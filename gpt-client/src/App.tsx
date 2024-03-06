@@ -69,7 +69,8 @@ function App() {
   // Set API Key for OpenAI in the server
   async function submitAPIKey(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const post = await fetch('http://localhost:3000/apikey', {
+
+    await fetch('http://localhost:3000/apikey', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -78,9 +79,11 @@ function App() {
         apiKey,
       }),
     });
+
     setApiKey('');
     alert('API Key Saved in State');
   }
+
   console.log('🚀 ~ Sending API Key to Backend:', apiKey);
 
   return (
