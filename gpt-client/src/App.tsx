@@ -24,11 +24,13 @@ function App() {
   ]);
   const [apiKey, setApiKey] = useState('');
 
+  
   useEffect(() => {
     getModels();
   }, []);
+  
 
-  // clear chat log
+  // Clear the Chat Logs 
   function clearChat() {
     setChatLog([]);
   }
@@ -45,8 +47,8 @@ function App() {
 
     const chatLogNew = [...chatLog, { user: 'me', message: input }];
 
-    setChatLog(chatLogNew);
-    setInput('');
+    await setInput('');
+    await setChatLog(chatLogNew);
 
     const messages = chatLogNew.map((m) => m.message).join('\n ');
 
@@ -62,7 +64,7 @@ function App() {
     });
 
     const data = await response.json();
-    setChatLog([...chatLogNew, { user: 'gpt', message: data.messageReply }]);
+    await setChatLog([...chatLogNew, { user: 'gpt', message: data.messageReply }]);
     console.log('🚀 ~ OpenAI Response Data:', data.messageReply);
   }
 

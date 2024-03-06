@@ -71,7 +71,7 @@ app.listen(port, () => {
 // Route to Send Prompt to OpenAI
 app.post('/', async (req, res) => {
     // Log the received message from the front end
-    console.log('Received message from front end:', req.body);
+    console.log('Received Message from Frontend:', req.body);
 
     if (!openai) {
         res.status(400).send('OpenAI instance not initialized yet.');
