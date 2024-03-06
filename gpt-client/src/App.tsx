@@ -12,6 +12,12 @@ interface Model {
 }
 
 function App() {
+  // Use getModels once when then app loads
+  useEffect(() => {
+    getModels();
+  }, []);
+
+  // Set Initial State Variables
   const [input, setInput] = useState('');
   const [models, setModels] = useState<Model[]>([]);
   const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
@@ -25,22 +31,19 @@ function App() {
   const [apiKey, setApiKey] = useState('');
 
   
-  useEffect(() => {
-    getModels();
-  }, []);
-  
 
   // Clear the Chat Logs 
   function clearChat() {
     setChatLog([]);
   }
 
-  async function getModels() {
-    const response = await fetch('http://localhost:3080/models');
-    const data = await response.json();
-    getModels();
-  }
+  // Get List of Models from OpenAI
+function getModels() {
+    fetch('http://localhost:3000/models')
+    .then(res => res.json())
+    .then(models => setModels(models.list));
 
+  }  
   // Submit Prompt to OpenAI
   async function handleSubmitMessage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -50,9 +53,9 @@ function App() {
     await setInput('');
     await setChatLog(chatLogNew);
 
-    const messages = chatLogNew.map((m) => m.message).join('\n ');
+    const messages = chatLogNew.map((m) => m.message).join('\n');
 
-    const response = await fetch('http://localhost:3000/', {
+    const response = await fetch('http://localhost:3000/completion', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

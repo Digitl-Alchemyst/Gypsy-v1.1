@@ -25,6 +25,10 @@ let apiKey = '';
 
 // Define openai at a higher scope level
 let openai;
+// Listen for API Calls
+app.listen(port, () => {
+  console.log(`Gypsy is listening at http://localhost:${port}`);
+});
 
 // Route to update the API key
 app.post('/apikey', (req, res) => {
@@ -32,8 +36,9 @@ app.post('/apikey', (req, res) => {
   const apiKey = req.body.apiKey;
   console.log('API Key Updated:', apiKey);
   res.send('API Key Updated');
+  // Initialize the OpenAI instance and use it
+  initializeOpenAI();
 });
-
 
 // Function to initialize the OpenAI instance
 function initializeOpenAI() {
@@ -46,30 +51,11 @@ function initializeOpenAI() {
     organization: 'org-KQGtXSQgRwgt8k3iUKzHg5uA',
     apiKey: `Bearer ${apiKey}`,
   });
-
-  // Use the openai instance here...
+  console.log('OpenAI Initialized');
 }
 
-// Example route that uses the OpenAI instance
-app.get('/example', (req, res) => {
-  if (!apiKey) {
-    res.status(400).send('API Key not set yet.');
-    return;
-  }
-
-  // Initialize the OpenAI instance and use it
-  initializeOpenAI();
-
-  // Your logic here...
-  res.send('Example route response');
-});
-
-app.listen(port, () => {
-  console.log(`Gypsy is listening at http://localhost:${port}`);
-});
-
 // Route to Send Prompt to OpenAI
-app.post('/', async (req, res) => {
+app.post('/completion', async (req, res) => {
     // Log the received message from the front end
     console.log('Received Message from Frontend:', req.body);
 
@@ -78,21 +64,33 @@ app.post('/', async (req, res) => {
         return;
     }
 
-    const { prompt } = req.body;
-
+    const { messsages, currentModel } = req.body;
 
     const completion = await openai.chat.completions.create({
-        messages: [{ role: 'system', content: 'Does this test pass?' }],
-        model: 'gpt-3.5-turbo',
+        messages: messsages,
+        model: currentModel,
         temperature: 0.7,
         maxTokens: 25,
-        topP: 1,
-        frequencyPenalty: 0,
-        presencePenalty: 0,
     });
     console.log(completion.choices[0]);
+
     res.json({
         messageReply: completion.choices[0].text
     });
 });
+
+// Route to Fetch Models from OpenAI
+app.get('/models', async (req, res) => {
+  if (!openai) {
+        res.status(400).send('OpenAI instance not initialized yet.');
+        return;
+    }
+
+    const models = await openai.models.list();
+
+    console.log(models);
+    res.json(models);
+    console.log('Models Fetched');
+});
+
 
