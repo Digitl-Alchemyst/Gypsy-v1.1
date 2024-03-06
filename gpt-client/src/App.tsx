@@ -81,10 +81,9 @@ function App() {
     });
 
     setApiKey('');
-    alert('API Key Saved in State');
+    alert('API Key Saved in Server State');
   }
 
-  console.log('🚀 ~ Sending API Key to Backend:', apiKey);
 
   return (
     <div className="App">

@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
 
@@ -11,7 +12,7 @@ const port = process.env.PORT;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Add Body Parser and CORS
 app.use(bodyParser.json());
@@ -27,12 +28,12 @@ let openai;
 
 // Route to update the API key
 app.post('/apikey', (req, res) => {
-  const { key } = req.body;
-  apiKey = key;
-  console.log('API Key Updated:', apiKey);
   console.log('Received request body:', req.body);
+  const apiKey = req.body.apiKey;
+  console.log('API Key Updated:', apiKey);
   res.send('API Key Updated');
 });
+
 
 // Function to initialize the OpenAI instance
 function initializeOpenAI() {
