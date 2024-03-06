@@ -11,6 +11,10 @@ const port = process.env.PORT;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Add Body Parser and CORS
+app.use(bodyParser.json());
 
 // Enable CORS for all routes
 app.use(cors());
@@ -73,18 +77,21 @@ app.post('/', async (req, res) => {
         return;
     }
 
+    const { prompt } = req.body;
+
+
     const completion = await openai.chat.completions.create({
         messages: [{ role: 'system', content: 'Does this test pass?' }],
         model: 'gpt-3.5-turbo',
         temperature: 0.7,
-        maxTokens: 100,
+        maxTokens: 25,
         topP: 1,
         frequencyPenalty: 0,
         presencePenalty: 0,
     });
     console.log(completion.choices[0]);
     res.json({
-        data: completion.choices
+        messageReply: completion.choices[0].text
     });
 });
 

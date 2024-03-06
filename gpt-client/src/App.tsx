@@ -12,11 +12,16 @@ interface Model {
 }
 
 function App() {
-
   const [input, setInput] = useState('');
   const [models, setModels] = useState<Model[]>([]);
-  const [currentModel, setCurrentModel] = useState('ada');
-  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
+  const [currentModel, setCurrentModel] = useState('gpt-3.5-turbo');
+  const [chatLog, setChatLog] = useState<ChatMessage[]>([
+    {
+      user: 'gpt',
+      message:
+        'Hello, I am Gypsy, your personal chatbot. I am currently learning about the topic of your choice. To start a conversation, type a message below.',
+    },
+  ]);
   const [apiKey, setApiKey] = useState('');
 
   useEffect(() => {
@@ -34,16 +39,14 @@ function App() {
     getModels();
   }
 
-
-
-  // Submit Prompt to OpenAI 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  // Submit Prompt to OpenAI
+  async function handleSubmitMessage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const chatLogNew = [...chatLog, { user: 'me', message: input }];
 
-    setInput('');
     setChatLog(chatLogNew);
+    setInput('');
 
     const messages = chatLogNew.map((m) => m.message).join('\n ');
 
@@ -53,32 +56,32 @@ function App() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: messages,
+        content: messages,
         currentModel,
       }),
     });
 
     const data = await response.json();
-    console.log("🚀 ~ data:", data)
+    setChatLog([...chatLogNew, { user: 'gpt', message: data.messageReply }]);
+    console.log('🚀 ~ OpenAI Response Data:', data.messageReply);
   }
 
   // Set API Key for OpenAI in the server
-async function submitAPIKey(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-  const post = await fetch('http://localhost:3000/apikey', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      apiKey,
-    }),
-  });
-  setApiKey('');
-  alert('API Key Saved in State');
-}
-console.log('Sending API Key:', apiKey);
-
+  async function submitAPIKey(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const post = await fetch('http://localhost:3000/apikey', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        apiKey,
+      }),
+    });
+    setApiKey('');
+    alert('API Key Saved in State');
+  }
+  console.log('🚀 ~ Sending API Key to Backend:', apiKey);
 
   return (
     <div className="App">
@@ -116,7 +119,7 @@ console.log('Sending API Key:', apiKey);
               type="text"
               placeholder="Enter your OpenAI API key here..."
             />
-            <button>Submit</button>
+            <button type="submit">Submit</button>
           </form>
           <p>
             <a href="https://beta.openai.com/account/api-keys">
@@ -129,15 +132,25 @@ console.log('Sending API Key:', apiKey);
       {/* Chat Box */}
       <section className="chatbox">
         {/* Chat Log */}
-        <div className="chat-log">
-          {chatLog.map((message, index) => (
-            <ChatMessage key={index} message={message} />
-          ))}
-        </div>
+        {/* Conditionally render if chat log is empty */}
+        {chatLog.length === 0 && (
+          <div className="empty-state">
+            <p>Start a conversation by typing a message</p>
+          </div>
+        )}
+
+        {/* Show chat log if not empty */}
+        {chatLog.length > 0 && (
+          <div className="chat-log">
+            {chatLog.map((message, index) => (
+              <ChatMessage key={index} message={message} />
+            ))}
+          </div>
+        )}
 
         {/* Chat Input */}
         <div className="chat-input-holder">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitMessage}>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -151,21 +164,27 @@ console.log('Sending API Key:', apiKey);
   );
 }
 
-export default App;
-
 const ChatMessage = ({ message }: { message: ChatMessage }) => {
+  let avatar = null;
+  let messageClass = '';
+
+  if (message.user === 'me') {
+    avatar = <img src="/Alch.jpg" alt="me" />;
+    messageClass = 'me';
+  } else if (message.user === 'gpt') {
+    avatar = <img src="/GPT.png" alt="chatgpt" />;
+    messageClass = 'chatgpt';
+  }
+
   return (
-    <div className={`chat-message ${message.user === 'gpt' && 'chatgpt'}`}>
+    <div className={`chat-message ${messageClass}`}>
       <div className="chat-message-center">
-        <div className={`avatar ${message.user === 'gpt' && 'chatgpt'}`}>
-          {message.user === 'gpt' && (
-            <img src="/GPT.png" alt="gypsy" />
-          )}
-        </div>
+        <div className={`avatar ${messageClass}`}>{avatar}</div>
+
         <div className="message">{message.message}</div>
       </div>
     </div>
   );
 };
 
-export { App };
+export default App;

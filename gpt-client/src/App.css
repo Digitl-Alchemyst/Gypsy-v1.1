@@ -50,6 +50,7 @@
   flex: 1;
   background-color: #2c2b3a;
   position: relative;
+  padding-top: 25px;
 }
 
 
@@ -77,11 +78,14 @@
 }
 
 .chat-message{
-    background-color: rgba(28, 34, 63, 0.21);
+  background-color: rgba(28, 34, 63, 0.21);
 }
 
 .chat-message.chatgpt{
-  background-color: rgb(255,255,255,0.35);
+  background-color: #211f3b;
+}
+.chat-message.me{
+  background-color: #373367;
 }
 
 .chat-message-center{
@@ -101,11 +105,17 @@
   height: 40px;
 }
 
-.avatar.chatgpt{
-  background-color: rgb(18, 121, 69);
-  border-radius: 50%;
-  width: 40px;
+.avatar img {
+  width: 40px; 
   height: 40px;
+  border-radius: 100%;
+}
+
+.chatgpt {
+  background-color: rgb(22, 184, 130);
+}
+.avatar.me{
+  background-color: rgb(214, 230, 224);
 }
 
 .message{
